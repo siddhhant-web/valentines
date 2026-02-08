@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Will you be my Valentine?</title>
+  <style>
+    :root{
+      --bg1:#f7c6d8;
+      --bg2:#f2b2cc;
+      --card:#ffffffdd;
+      --text:#222;
+      --yes:#e10064;
+      --yes2:#ff2f86;
+      --no:#d9d9d9;
+      --shadow: 0 18px 50px rgba(0,0,0,.18);
+      --radius: 22px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      min-height:100vh;
+      display:grid;
+      place-items:center;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(800px 500px at 30% 20%, #ffffff55 0%, transparent 60%),
+        linear-gradient(135deg, var(--bg1), var(--bg2));
+    }
+    .wrap{
+      width:min(720px, 92vw);
+      padding:18px;
+    }
+    .card{
+      position:relative;
+      margin:auto;
+      background:var(--card);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:28px 22px 18px;
+      backdrop-filter: blur(6px);
+      overflow:hidden;
+      min-height: 360px;
+      display:grid;
+      place-items:center;
+    }
+    .inner{
+      width:min(520px, 100%);
+      text-align:center;
+    }
+    .icon{
+      width:86px;
+      height:86px;
+      margin: 4px auto 10px;
+      display:grid;
+      place-items:center;
+      border-radius:999px;
+      background:#fff;
+      box-shadow: 0 10px 25px rgba(0,0,0,.12);
+      position:relative;
+    }
+    .icon::after{
+      content:"♥";
+      position:absolute;
+      right:-6px;
+      top:-10px;
+      font-size:26px;
+      color:#ff2f86;
+      transform: rotate(-12deg);
+    }
+    .face{
+      width:56px;
+      height:56px;
+      border-radius:999px;
+      background: radial-gradient(circle at 30% 30%, #ffd7c0 0%, #ffb59c 70%);
+      position:relative;
+    }
+    .face::before, .face::after{
+      content:"";
+      position:absolute;
+      top:22px;
+      width:6px;
+      height:6px;
+      border-radius:999px;
+      background:#222;
+      opacity:.85;
+    }
+    .face::before{ left:18px; }
+    .face::after{ right:18px; }
+    .nose{
+      position:absolute;
+      left:50%;
+      top:30px;
+      transform:translateX(-50%);
+      width:8px;height:8px;
+      background:#ff5a8f;
+      border-radius: 2px 2px 8px 8px;
+      opacity:.9;
+    }
+
+    h1{
+      margin:10px 0 18px;
+      font-size: clamp(22px, 3.5vw, 34px);
+      font-weight: 800;
+      letter-spacing:-.4px;
+    }
+
+    .btnRow{
+      position:relative;
+      height:84px;
+      margin: 10px auto 8px;
+      width:min(420px, 100%);
+    }
+    button{
+      border:0;
+      cursor:pointer;
+      font-weight:800;
+      border-radius: 999px;
+      transition: transform .08s ease, filter .15s ease;
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    button:active{ transform: scale(.98); }
+
+    #yesBtn{
+      position:absolute;
+      left: 18px;
+      top: 10px;
+      width: 132px;
+      height: 56px;
+      font-size: 18px;
+      color:#fff;
+      background: linear-gradient(135deg, var(--yes), var(--yes2));
+      box-shadow: 0 14px 30px rgba(225,0,100,.25);
+    }
+    #yesBtn:hover{ filter: brightness(1.03); }
+
+    #noBtn{
+      position:absolute;
+      right: 18px;
+      top: 18px;
+      width: 72px;
+      height: 38px;
+      font-size: 12px;
+      color:#333;
+      background: var(--no);
+      box-shadow: 0 10px 18px rgba(0,0,0,.10);
+    }
+
+    .note{
+      margin-top: 6px;
+      font-size: 12px;
+      opacity:.7;
+    }
+
+    .yay{
+      text-align:center;
+      display:none;
+    }
+    .yay h2{
+      margin: 0 0 10px;
+      font-size: clamp(28px, 4vw, 44px);
+      letter-spacing:-.6px;
+    }
+    .meme{
+      width:min(420px, 100%);
+      border-radius: 14px;
+      box-shadow: 0 14px 35px rgba(0,0,0,.18);
+      border: 6px solid #ffffffaa;
+    }
+    .small{
+      margin-top:10px;
+      font-size: 12px;
+      opacity:.7;
+    }
+
+    .confetti{
+      pointer-events:none;
+      position:absolute;
+      inset:0;
+      opacity:0;
+      transition: opacity .25s ease;
+      background:
+        radial-gradient(circle at 10% 20%, #fff 0 2px, transparent 3px),
+        radial-gradient(circle at 30% 80%, #fff 0 2px, transparent 3px),
+        radial-gradient(circle at 70% 30%, #fff 0 2px, transparent 3px),
+        radial-gradient(circle at 90% 70%, #fff 0 2px, transparent 3px);
+      background-size: 140px 140px;
+      mix-blend-mode: soft-light;
+    }
+    .confetti.on{ opacity:1; }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="card" id="card">
+      <div class="confetti" id="confetti"></div>
+
+      <!-- ASK VIEW -->
+      <div class="inner" id="askView">
+        <div class="icon">
+          <div class="face">
+            <div class="nose"></div>
+          </div>
+        </div>
+
+        <h1><span id="name">Reetika</span>, will you be my valentine?</h1>
+
+        <div class="btnRow" id="btnRow">
+          <button id="yesBtn">Yes</button>
+          <button id="noBtn" aria-label="No">No</button>
+        </div>
+
+        <div class="note">“No” seems a bit shy 😈</div>
+      </div>
+
+      <!-- YAY VIEW -->
+      <div class="inner yay" id="yayView">
+        <h2>YAY! 🎉</h2>
+
+        <!-- Replace this with YOUR meme GIF/image -->
+        <img class="meme" id="memeImg"
+             src="https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif"
+             alt="Valentine meme" />
+
+        <div class="small">Now go tell your boyfriend 😄</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const name = "Reetika"; // <-- change if needed
+    document.getElementById("name").textContent = name;
+
+    const noBtn = document.getElementById("noBtn");
+    const yesBtn = document.getElementById("yesBtn");
+    const btnRow = document.getElementById("btnRow");
+    const askView = document.getElementById("askView");
+    const yayView = document.getElementById("yayView");
+    const confetti = document.getElementById("confetti");
+
+    function clamp(v, min, max){ return Math.max(min, Math.min(max, v)); }
+
+    function moveNoButton() {
+      const rowRect = btnRow.getBoundingClientRect();
+      const btnRect = noBtn.getBoundingClientRect();
+
+      // Allowed area inside btnRow
+      const padding = 8;
+      const minX = padding;
+      const minY = padding;
+      const maxX = rowRect.width - btnRect.width - padding;
+      const maxY = rowRect.height - btnRect.height - padding;
+
+      // Random spot
+      const x = Math.random() * (maxX - minX) + minX;
+      const y = Math.random() * (maxY - minY) + minY;
+
+      noBtn.style.left = x + "px";
+      noBtn.style.top  = y + "px";
+      noBtn.style.right = "auto";
+    }
+
+    // Run away when the cursor gets close
+    btnRow.addEventListener("mousemove", (e) => {
+      const btn = noBtn.getBoundingClientRect();
+      const dx = (btn.left + btn.width/2) - e.clientX;
+      const dy = (btn.top + btn.height/2) - e.clientY;
+      const dist = Math.hypot(dx, dy);
+
+      if (dist < 110) moveNoButton();
+    });
+
+    // Also run away on hover/touch
+    noBtn.addEventListener("mouseenter", moveNoButton);
+    noBtn.addEventListener("touchstart", (e) => {
+      e.preventDefault();
+      moveNoButton();
+    }, { passive:false });
+
+    yesBtn.addEventListener("click", () => {
+      confetti.classList.add("on");
+      askView.style.display = "none";
+      yayView.style.display = "block";
+    });
+
+    // Start with NO button positioned using left/top for smoother movement
+    // Convert initial right-based placement to left/top once layout is ready
+    window.addEventListener("load", () => {
+      const rowRect = btnRow.getBoundingClientRect();
+      const btnRect = noBtn.getBoundingClientRect();
+      const left = btnRect.left - rowRect.left;
+      const top  = btnRect.top  - rowRect.top;
+      noBtn.style.left = left + "px";
+      noBtn.style.top  = top + "px";
+      noBtn.style.right = "auto";
+    });
+  </script>
+</body>
+</html>
